@@ -128,19 +128,6 @@ for e in obj_files:
 ls = link_symbols(main_dic, objdic_vector)
 
 # create graphviz
-dot = graphviz.Digraph(comment=os.path.basename(args.mainbinary))
-
-num = 0
-for e in ls:
-  startnum = num
-
-  dot.node(f'A{num}', e)
-  num += 1
-
-  for e2 in ls[e]:
-    fname = os.path.basename(e2)
-    dot.node(f'B{num}', fname)
-    dot.edge(f'A{startnum}', f'B{num}')
-    num += 1
+dot = do_graph(args.mainbinary, ls)
 
 dot.render(f'mainbinary.gv', view=True)
