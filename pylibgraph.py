@@ -50,6 +50,36 @@ def link_symbols(main_dic, objdic_vector):
           link[symbol_name].append(objdic[symbol_name][1])
   return link
 
+def do_graph(mainbinary, linksymb_list):
+  # graphviz graph creation
+  dot = graphviz.Digraph(comment=os.path.basename(mainbinary))
+
+  num = 0
+  for symbol_key in ls:
+    startnum = num
+
+    dot.node(f'A{num}', symbol_key)
+    num += 1
+
+    if len(linksymb_list[symbol_key]) == 1:
+      obj_file_name = linksymb_list[symbol_key][0]
+      fname = os.path.basename(obj_file_name)
+      dot.node(f'B{num}', fname)
+      dot.edge(f'A{startnum}', f'B{num}')
+      num += 1
+
+    else:
+      dot.node(f'M{startnum}', 'multi')
+      dot.edge(f'A{startnum}', f'M{startnum}')
+
+      for obj_file_name in linksymb_list[symbol_key]:
+        fname = os.path.basename(obj_file_name)
+        dot.node(f'B{num}', fname)
+        dot.edge(f'M{startnum}', f'B{num}')
+        num += 1
+
+  return dot
+
 #=====================================================================
 # MAIN
 #=====================================================================
