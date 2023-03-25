@@ -36,6 +36,7 @@ def parse_nm_output(fname, arg_stdout, ismain = True):
   return symbol_dic
 
 def link_symbols(main_dic, objdic_vector):
+  # links symbol from main_dic to object file vector
   link = {}
   for symbol_name in main_dic:
 
