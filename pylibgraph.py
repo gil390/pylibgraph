@@ -58,25 +58,29 @@ def do_graph(mainbinary, linksymb_list):
   for symbol_key in ls:
     startnum = num
 
-    dot.node(f'A{num}', symbol_key)
+    dot.node(f'A{num}', f'{symbol_key}\n{num}')
     num += 1
 
     if len(linksymb_list[symbol_key]) == 1:
       obj_file_name = linksymb_list[symbol_key][0]
       fname = os.path.basename(obj_file_name)
-      dot.node(f'B{num}', fname)
+      dot.node(f'B{num}', f'{fname}\n{num}')
       dot.edge(f'A{startnum}', f'B{num}')
       num += 1
 
-    else:
-      dot.node(f'M{startnum}', 'multi')
+    elif len(linksymb_list[symbol_key]) > 0:
+      dot.node(f'M{startnum}', f'multi\n{startnum}')
       dot.edge(f'A{startnum}', f'M{startnum}')
 
       for obj_file_name in linksymb_list[symbol_key]:
         fname = os.path.basename(obj_file_name)
-        dot.node(f'B{num}', fname)
+        dot.node(f'B{num}', f'{fname}\n{num}')
         dot.edge(f'M{startnum}', f'B{num}')
         num += 1
+
+    else:
+      dot.node(f'U{startnum}', f'?')
+      dot.edge(f'A{startnum}', f'U{startnum}')
 
   return dot
 
